@@ -36,7 +36,8 @@ from urllib.parse import urlsplit           # get filename from url
 import requests
 
 # Our PulledPork3 internal libraries
-from lib import config, logger
+from lib.config import Config
+from lib.logger import Logger
 from lib.snort import Blocklist
 
 
@@ -68,8 +69,8 @@ ET_BLOCKLIST_URL = 'http://rules.emergingthreatspro.com/fwrules/emerging-Block-I
 #   Prepare the logging and config
 # -----------------------------------------------------------------------------
 
-log = logger.Logger()
-gc = config.Config()
+log = Logger()
+gc = Config()
 
 
 # -----------------------------------------------------------------------------
@@ -94,11 +95,11 @@ def main():
     #         will override less verbose ones. Priority order:
     #               DEFAULT (info) < quiet < verbose < debug
     if gc.args.quiet:
-        log.level = logger.Levels.WARNING
+        log.level = log.Levels.WARNING
     if gc.args.verbose:
-        log.level = logger.Levels.VERBOSE
+        log.level = log.Levels.VERBOSE
     if gc.args.debug:
-        log.level = logger.Levels.DEBUG
+        log.level = log.Levels.DEBUG
 
     # Print the env
     print_environment(gc)
@@ -1183,24 +1184,6 @@ def get_snort_version(snort_path=None):
         log.error('Unable to grok version number from Snort output')
     log.verbose("\tsnort version number from executable is: " + x[1])
     return x[1]
-
-
-def get_distro():
-    '''
-    Determine the current distro
-    '''
-
-    log.debug("Determining distro from config file or from OS.")
-
-    # first check the config file
-    if gc.config.has_option('configuration', 'distro'):
-        log.debug("\tDetermining distro from config file.")
-        v = gc.config['configuration']['distro']
-        log.debug("\tdistro from config is " + v)
-        return v
-    # if not config file, try to determine from OS
-    # todo:
-    return None
 
 
 def get_policy(policy):

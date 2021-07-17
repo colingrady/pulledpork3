@@ -39,6 +39,9 @@ class Logger(object):
     _halt_on_warn = DEFAULT_HALT_ON_WARN
     _hidden_strings = []
 
+    # Male Levels class accessible via Logger class
+    Levels = Levels
+
     def __init__(self, level=None, halt_on_warn=None):
 
         # Allow overrides to global defaults during instantiation
